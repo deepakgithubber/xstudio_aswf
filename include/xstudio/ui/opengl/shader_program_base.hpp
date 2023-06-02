@@ -4,8 +4,18 @@
 // clang-format off
 #include <Imath/ImathVec.h>
 #include <Imath/ImathMatrix.h>
-#include <GL/glew.h>
-#include <GL/gl.h>
+
+#ifdef __APPLE__
+    #include "TargetConditionals.h"
+    #ifdef TARGET_OS_MAC
+        #include <GL/glew.h>
+        #include <OpenGL/gl3.h>
+    #endif
+#else
+    #include <GL/glew.h>
+    #include <GL/gl.h>
+#endif
+
 // clang-format on
 
 #include "xstudio/utility/json_store.hpp"

@@ -21,7 +21,7 @@ macro(default_compile_options name)
 	target_compile_definitions(${name}
 		PUBLIC $<$<BOOL:${BUILD_TESTING}>:test_private=public>
 		PUBLIC $<$<NOT:$<BOOL:${BUILD_TESTING}>>:test_private=private>
-		PRIVATE -D__linux__
+		#PRIVATE -D__linux__
 		PRIVATE XSTUDIO_GLOBAL_VERSION=\"${XSTUDIO_GLOBAL_VERSION}\"
 		PRIVATE XSTUDIO_GLOBAL_NAME=\"${XSTUDIO_GLOBAL_NAME}\"
 		PRIVATE PROJECT_VERSION=\"${PROJECT_VERSION}\"
@@ -352,7 +352,7 @@ macro(create_qml_component_with_alias NAME ALIASNAME VERSION DEPS EXTRAMOC)
 		list(APPEND SOURCES ${${MOCNAME}_moc})
 	endforeach()
 
-	add_library(${PROJECT_NAME} SHARED ${SOURCES})
+	add_library(${PROJECT_NAME} STATIC ${SOURCES})
 	add_library(${ALIASNAME} ALIAS ${PROJECT_NAME})
 	default_options_qt(${PROJECT_NAME})
 

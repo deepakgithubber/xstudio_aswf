@@ -35,7 +35,7 @@ target_link_libraries(${PROJECT_NAME}
 		xstudio::utility
 		caf::core
 		caf::io
-		asound
+		#asound
 	PRIVATE
 		pybind11::embed
 )

@@ -11,6 +11,13 @@
 #include "xstudio/ui/opengl/gl_debug_utils.h"
 #endif
 
+#ifdef __APPLE__
+	#define GLFW_INCLUDE_GLCOREARB
+	//#include <GL/glew.h>
+	//#include <GLFW/glfw3.h>
+	//#include <OpenGL/gl.h>
+#endif
+
 using namespace xstudio;
 using namespace xstudio::ui::opengl;
 using namespace xstudio::ui::viewport;
@@ -19,6 +26,25 @@ using namespace xstudio::colour_pipeline;
 using namespace xstudio::utility;
 
 namespace {
+// Vertex shader source code
+static const char* vertexShaderSource = R"(
+#version 330 core
+layout (location = 0) in vec3 aPos;
+void main()
+{
+    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+}
+)";
+
+// Fragment shader source code
+static const char* fragmentShaderSource = R"(
+#version 330 core
+out vec4 FragColor;
+void main()
+{
+	FragColor = vec4(1.0, 0.5, 0.2, 1.0);
+}
+)";
 
 static const std::string default_vertex_shader = R"(
 #version 330 core
@@ -29,6 +55,7 @@ vec2 calc_pixel_coordinate(vec2 viewport_coordinate)
 )";
 
 static const std::string colour_transforms = R"(
+#version 330 core
 vec4 colour_transforms(vec4 rgba_in)
 {
     return rgba_in;
@@ -95,7 +122,7 @@ void OpenGLViewportRenderer::upload_image_and_colour_data(
     if (!textures_.size())
         return;
 
-    textures_[0]->set_texture_type("SSBO"); // texture_mode_preference_->value());
+    //textures_[0]->set_texture_type("SSBO"); // texture_mode_preference_->value());
 
     if (onscreen_frame_) {
         if (onscreen_frame_->error_state() == BufferErrorState::HAS_ERROR) {
@@ -203,7 +230,7 @@ void OpenGLViewportRenderer::render(
 
     // const std::lock_guard<std::mutex> mutex_locker(m);
     init();
-
+    
     const auto transform_viewport_to_image_space =
         projection_matrix * fit_mode_matrix.inverse();
 
@@ -230,7 +257,7 @@ void OpenGLViewportRenderer::render(
     const float viewport_du_dx =
         image_zoom_in_viewport / (viewport_width * viewport_x_size_in_window);
 
-    /* we do our own clear of the viewport */
+    /* we do our own clear of the viewport */ 
     clear_viewport_area(to_scene_matrix);
 
     // if we've received a new image and/or colour pipeline data (LUTs etc) since the last
@@ -262,7 +289,7 @@ void OpenGLViewportRenderer::render(
     glBlendEquation(GL_FUNC_ADD);
 
     if (active_shader_program_) {
-
+	
         active_shader_program_->use();
 
         bool use_bilinear_filtering = false;
@@ -327,7 +354,7 @@ void OpenGLViewportRenderer::render(
     glBindVertexArray(vao_);
     glDrawArrays(GL_QUADS, 0, 4);
     glUseProgram(0);
-
+    
 
     /* N.B. To draw into the image coordinate system (where image with identity transform has
     spans of -1.0 to 1.0 and is centred on 0,0): Imath::M44f r =
@@ -390,7 +417,7 @@ bool OpenGLViewportRenderer::activate_shader(
     const auto &cp_sid = colour_pipeline_shader->shader_id_;
 
     // do we already have this shader compiled?
-    if (programs_.find(ib_sid) == programs_.end() ||
+   if (programs_.find(ib_sid) == programs_.end() ||
         programs_[ib_sid].find(cp_sid) == programs_[ib_sid].end()) {
 
         // try to compile the shader for this combo of image buffer unpack
@@ -420,7 +447,14 @@ bool OpenGLViewportRenderer::activate_shader(
 
 void OpenGLViewportRenderer::pre_init() {
 
-    glewInit();
+    #if __linux__
+        // Initialize GLEW
+        if (glewInit() != GLEW_OK)
+        {
+    	    std::cerr << "Failed to initialize GLEW" << std::endl;
+     	    return;
+        }
+    #endif
 
     // we need to know if we have alpha in our draw buffer, which might require
     // different strategies for drawing overlays
@@ -447,5 +481,5 @@ void OpenGLViewportRenderer::pre_init() {
 
     // add shader for no image render
     no_image_shader_program_ =
-        GLShaderProgramPtr(static_cast<GLShaderProgram *>(new NoImageShaderProgram()));
+       	GLShaderProgramPtr(static_cast<GLShaderProgram *>(new NoImageShaderProgram()));
 }

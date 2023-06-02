@@ -9,6 +9,8 @@ SET(LINK_DEPS
 	xstudio::ui::opengl::viewport
 	xstudio::ui::qt::viewport_widget
 	xstudio::ui::viewport
+	xstudio::ui::qml::helper
+	xstudio::ui::qml::playhead
 	xstudio::utility
 )
 

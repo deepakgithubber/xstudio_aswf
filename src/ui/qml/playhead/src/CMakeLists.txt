@@ -4,6 +4,7 @@ SET(LINK_DEPS
 	xstudio::audio_output
 	xstudio::ui::qml::helper
 	xstudio::utility
+	xstudio::ui::qml::media
 )
 
 SET(EXTRAMOC

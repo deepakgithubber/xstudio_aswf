@@ -1,5 +1,6 @@
 SET(LINK_DEPS
 	xstudio::utility
+	xstudio::module
 	caf::core
 )
 

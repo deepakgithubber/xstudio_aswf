@@ -222,6 +222,9 @@ using socket_t = int;
 #include <sstream>
 #include <string>
 #include <sys/stat.h>
+#ifdef HAVE_SYS_UCRED_H
+   #include <sys/ucred.h>
+#endif
 #include <thread>
 
 #ifdef CPPHTTPLIB_OPENSSL_SUPPORT
@@ -2893,20 +2896,23 @@ inline void get_remote_ip_and_port(socket_t sock, std::string &ip, int &port) {
                    &addr_len)) {
 #ifndef _WIN32
     if (addr.ss_family == AF_UNIX) {
-#if defined(__linux__)
+
+#if defined(Q_OS_MAC) && defined(SOL_LOCAL) && defined(SO_PEERPID)
+        pid_t pid;
+        socklen_t len = sizeof(pid);
+        if (getsockopt(sock, SOL_LOCAL, SO_PEERPID, &pid, &len) == 0) {
+          port = pid;
+        }
+      
+
+#elif defined(Q_OS_LINUX)
       struct ucred ucred;
       socklen_t len = sizeof(ucred);
       if (getsockopt(sock, SOL_SOCKET, SO_PEERCRED, &ucred, &len) == 0) {
         port = ucred.pid;
       }
-#elif defined(SOL_LOCAL) && defined(SO_PEERPID) // __APPLE__
-      pid_t pid;
-      socklen_t len = sizeof(pid);
-      if (getsockopt(sock, SOL_LOCAL, SO_PEERPID, &pid, &len) == 0) {
-        port = pid;
-      }
 #endif
-      return;
+       return;
     }
 #endif
     get_ip_and_port(addr, addr_len, ip, port);

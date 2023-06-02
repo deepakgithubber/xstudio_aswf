@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-#include <experimental/numeric>
+#include <numeric>
 #include <functional>
 #include <iostream>
 

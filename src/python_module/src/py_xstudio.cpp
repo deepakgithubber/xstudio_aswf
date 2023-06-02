@@ -40,6 +40,18 @@ py::tuple py_parse_posix_path(const std::string &path) {
 }
 } // namespace caf::python
 
+namespace caf {
+namespace detail {
+
+template <>
+struct int_types_by_size<16> {
+  using unsigned_type = __uint128_t;
+  using signed_type = __int128;
+};
+
+} // namespace detail
+} // namespace caf
+
 #include "py_config.hpp"
 
 void py_remote_session_file(py::module_ &);

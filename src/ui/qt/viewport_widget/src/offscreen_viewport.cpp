@@ -1,6 +1,14 @@
 // SPDX-License-Identifier: Apache-2.0
-#include <GL/glew.h>
-#include <GL/gl.h>
+#ifdef __APPLE__
+    #include "TargetConditionals.h"
+    #ifdef TARGET_OS_MAC
+        #include <GL/glew.h>
+        #include <OpenGL/gl.h>
+    #endif
+#else
+    #include <GL/glew.h>
+    #include <GL/gl.h>
+#endif
 
 #include <filesystem>
 

@@ -1,7 +1,7 @@
 SET(LINK_DEPS
 	xstudio::global_store
 	caf::core
-	stdc++fs
+	#stdc++fs
 	dl
 )
 

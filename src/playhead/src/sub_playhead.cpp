@@ -602,7 +602,7 @@ void SubPlayhead::set_position(
                 broadcast_image_frame(now, frame, playing, timeline_pts);
 
             } else if (media_type_ == media::MediaType::MT_AUDIO && playing) {
-                broadcast_audio_frame(now, frame, false);
+                //broadcast_audio_frame(now, frame, false);
             }
 
         } else if (frame && (active_in_ui || force_updates)) {

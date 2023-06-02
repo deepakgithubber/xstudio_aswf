@@ -1,5 +1,14 @@
 // SPDX-License-Identifier: Apache-2.0
-#include <GL/gl.h>
+
+#ifdef __APPLE__
+    #include "TargetConditionals.h"
+    #ifdef TARGET_OS_MAC
+        #include <OpenGL/gl3.h>
+    #endif
+#else
+    #include <GL/gl.h>
+#endif
+
 #include <ImfRgbaFile.h>
 #include <vector>
 #include <array>

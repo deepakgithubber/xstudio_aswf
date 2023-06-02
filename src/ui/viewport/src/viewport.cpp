@@ -1063,7 +1063,7 @@ void Viewport::attribute_changed(const utility::Uuid &attr_uuid, const int role)
 
         const std::string filter_mode_pref = filter_mode_preference_->value();
         for (auto opt : ViewportRenderer::pixel_filter_mode_names) {
-            if (filter_mode_pref == std::get<1>(opt)) {
+            if (filter_mode_pref == std::get<1>(opt) && the_renderer_) {
                 the_renderer_->set_render_hints(std::get<0>(opt));
             }
         }
@@ -1272,7 +1272,7 @@ void Viewport::instance_overlay_plugins(const bool share_plugin_instances) {
                 auto funkydunc = request_receive<plugin::ViewportOverlayRendererPtr>(
                     *sys, overlay_actor_, overlay_render_function_atom_v, is_main_viewer_);
 
-                if (funkydunc) {
+                if (funkydunc && the_renderer_) {
                     the_renderer_->add_overlay_renderer(pd.uuid_, funkydunc);
                 }
 

@@ -29,8 +29,12 @@ namespace utility {
 
     struct absolute_receive_timeout {
       public:
-        using ms         = std::chrono::milliseconds;
-        using clock_type = std::chrono::system_clock;
+        using ms = std::chrono::milliseconds;
+        #ifdef __APPLE__
+            using clock_type = std::chrono::high_resolution_clock;
+        #else
+            using clock_type = std::chrono::system_clock;
+        #endif
         // using clock_type = std::chrono::high_resolution_clock;
 
         absolute_receive_timeout(int msec) { x_ = clock_type::now() + ms(msec); }

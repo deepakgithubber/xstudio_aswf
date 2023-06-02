@@ -80,8 +80,8 @@ void main()
 )";
 
 const char *frag_shader_base = R"(
-#version 430 core
-#extension GL_ARB_shader_storage_buffer_object : require
+#version 330 core
+//#extension GL_ARB_shader_storage_buffer_object : require
 in vec2 texPosition;
 out vec4 FragColor;
 //uniform usampler2DRect the_tex;
@@ -94,6 +94,20 @@ uniform bool use_ssbo;
 
 uniform usampler2DRect the_tex;
 uniform ivec2 tex_dims;
+
+
+vec2 unpackHalf2x16_alternative(uint value)
+{
+    const vec2 bitMask = vec2(0x3FF, 0x3FF);
+    const vec2 bitShift = vec2(10.0, 0.0);
+    const vec2 bitOffset = vec2(0.0, 16.0);
+    const vec2 exponent = vec2(-14.0, -14.0);
+
+    vec2 unpacked = vec2(value & floatBitsToUint(bitMask.x), (value >> bitShift.x) & floatBitsToUint(bitMask.y));
+    unpacked = (unpacked + bitOffset) * vec2(1.0 / 1024.0, 1.0 / 1024.0);
+    unpacked = sign(unpacked) * exp2((unpacked - vec2(1.0)) * exponent);
+    return unpacked;
+}
 
 ivec2 step_sample(ivec2 tex_coord)
 {
@@ -168,7 +182,7 @@ uint get_image_data_4bytes_packed_tex(int byte_address) {
 // in a vec2 at the given byte address into the raw image
 // buffer as created by the image reader
 vec2 get_image_data_2floats_tex(int byte_address) {
-    return unpackHalf2x16(get_image_data_4bytes_packed_tex(byte_address));
+    return unpackHalf2x16_alternative(get_image_data_4bytes_packed_tex(byte_address));
 }
 
 // This function returns 2 bytes of image data packed
@@ -193,12 +207,12 @@ int get_image_data_2bytes_tex(int byte_address) {
         } else if (elem == 3) {
             uvec4 c2 = texture(the_tex, step_sample(tex_coord));
             result = int(c1.w + (c2.x << 8));
-        }
+       }
     }
     return result;
 }
 
-layout (std430, binding = 0) buffer ssboObject {
+layout (std430, binding = 0) uniform ssboObject {
     uint data[];
 } ssboData;
 
@@ -239,7 +253,7 @@ vec2 get_image_data_2floats_ssbo(int byte_address) {
 
     uint c = get_image_data_4bytes_packed_ssbo(byte_address);
 
-    return unpackHalf2x16(c);
+    return unpackHalf2x16_alternative(c);
 }
 
 // This function returns 4 bytes of image data packed
@@ -300,7 +314,7 @@ int get_image_data_1byte(int byte_address) {
 
 vec2 get_image_data_2floats(int byte_address) {
 
-    return unpackHalf2x16(use_ssbo ? get_image_data_4bytes_packed_ssbo(byte_address) : get_image_data_4bytes_packed_tex(byte_address));
+    return unpackHalf2x16_alternative(use_ssbo ? get_image_data_4bytes_packed_ssbo(byte_address) : get_image_data_4bytes_packed_tex(byte_address));
 }
 
 int get_image_data_2bytes(int byte_address) {
@@ -521,7 +535,7 @@ void GLShaderProgram::compile() {
             vertex_shaders_.begin(),
             vertex_shaders_.end(),
             [&shaders](const std::string &shader_code) {
-                shaders.push_back(compile_vertex_shader(shader_code));
+	    	shaders.push_back(compile_vertex_shader(shader_code));
             });
 
         // compile the fragment shader objects

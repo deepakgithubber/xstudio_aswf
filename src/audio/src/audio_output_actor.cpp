@@ -66,7 +66,8 @@ AudioOutputDeviceActor::AudioOutputDeviceActor(
             } else if (is_playing && !playing_) {
                 // start loop
                 playing_ = true;
-                anon_send(actor_cast<caf::actor>(this), push_samples_atom_v);
+                //crashing on MacOS
+                //anon_send(actor_cast<caf::actor>(this), push_samples_atom_v);
             }
         },
         [=](push_samples_atom) {

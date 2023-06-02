@@ -2,8 +2,16 @@
 #pragma once
 
 // clang-format off
-#include <GL/glew.h>
-#include <GL/gl.h>
+#ifdef __APPLE__
+    #include "TargetConditionals.h"
+    #ifdef TARGET_OS_MAC
+        #include <GL/glew.h>
+        #include <OpenGL/gl3.h>
+    #endif
+#else
+    #include <GL/glew.h>
+    #include <GL/gl.h>
+#endif
 // clang-format on
 
 #include "xstudio/media_reader/media_reader.hpp"

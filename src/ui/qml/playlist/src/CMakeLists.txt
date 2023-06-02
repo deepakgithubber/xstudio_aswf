@@ -3,6 +3,9 @@ SET(LINK_DEPS
 	Qt5::Core
 	xstudio::ui::qml::helper
 	xstudio::ui::qml::playhead
+	xstudio::ui::qml::viewport
+	xstudio::ui::qml::session
+	xstudio::timeline
 	xstudio::utility
 )
 

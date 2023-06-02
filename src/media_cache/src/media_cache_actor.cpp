@@ -1,7 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
 #include <chrono>
 #include <functional>
+
+#ifdef __APPLE__
+#include <stdlib.h>
+#else
 #include <malloc.h>
+#endif
 
 #include "xstudio/atoms.hpp"
 #include "xstudio/broadcast/broadcast_actor.hpp"
@@ -38,7 +43,7 @@ TrimActor::TrimActor(caf::actor_config &cfg) : caf::event_based_actor(cfg) {
 
     behavior_.assign([=](unpreserve_atom, const size_t count) {
         // spdlog::stopwatch sw;
-        malloc_trim(64);
+        //malloc_trim(64);
         // spdlog::warn("Release {:.3f}", sw);
     });
 }

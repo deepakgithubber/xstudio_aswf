@@ -43,6 +43,8 @@ void QMLViewportRenderer::paint() {
     // TODO: again, this init call probably shouldn't happen in the main
     // draw call. see above.
 
+
+    qDebug()<< "gl context "<< QOpenGLContext::currentContext(); 
     if (!init_done) {
         init_done = true;
         init_renderer();

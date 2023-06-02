@@ -8,8 +8,16 @@
 #include "xstudio/utility/media_reference.hpp"
 #include "xstudio/ui/viewport/viewport_helpers.hpp"
 
-#include <GL/glew.h>
-#include <GL/gl.h>
+#ifdef __APPLE__
+    #include "TargetConditionals.h"
+    #ifdef TARGET_OS_MAC
+        #include <GL/glew.h>
+        #include <OpenGL/gl.h>
+    #endif
+#else
+    #include <GL/glew.h>
+    #include <GL/gl.h>
+#endif
 
 using namespace xstudio;
 using namespace xstudio::ui::viewport;

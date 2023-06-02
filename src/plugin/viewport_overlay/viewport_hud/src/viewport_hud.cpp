@@ -6,8 +6,10 @@
 #include "xstudio/utility/blind_data.hpp"
 #include "xstudio/ui/viewport/viewport_helpers.hpp"
 
+#ifdef __linux__
 #include <GL/glew.h>
 #include <GL/gl.h>
+#endif
 
 using namespace xstudio;
 using namespace xstudio::ui::viewport;

@@ -1,6 +1,6 @@
 project(media_reader_ffmpeg VERSION 0.1.0 LANGUAGES CXX)
 
-find_package(FFMPEG REQUIRED COMPONENTS avcodec avformat swscale avutil)
+find_package(FFMPEG REQUIRED COMPONENTS avcodec avformat swscale avutil swresample)
 
 
 set(SOURCES
@@ -22,10 +22,12 @@ target_compile_options(${PROJECT_NAME} PRIVATE -Wfatal-errors)
 target_link_libraries(${PROJECT_NAME}
 	PUBLIC
 		xstudio::media_reader
-		FFMPEG::avcodec
-		FFMPEG::avformat
-		FFMPEG::swscale
-		FFMPEG::avutil
-)
+		${FFMPEG_LIBRARIES}
+		${FFMPEG_AVFORMAT_LIBRARY}
+		${FFMPEG_AVUTIL_LIBRARY}
+		${FFMPEG_AVCODEC_LIBRARY}
+		${FFMPEG_SWSCALE_LIBRARY}
+		${FFMPEG_SWRESAMPLE_LIBRARY}
+	)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES LINK_DEPENDS_NO_SHARED true)

@@ -1,6 +1,7 @@
 SET(LINK_DEPS
 	${CAF_LIBRARY_core}
 	Qt5::Core
+	Qt5::Quick
 	xstudio::media
 	xstudio::ui::qml::helper
 	xstudio::utility

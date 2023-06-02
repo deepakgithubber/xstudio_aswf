@@ -13,6 +13,12 @@
 #include <regex>
 #include <set>
 
+#ifdef __APPLE__
+#define st_mtim st_mtimespec
+#define st_atim st_atimespec
+#define st_ctim st_ctimespec
+#endif
+
 #include "xstudio/utility/helpers.hpp"
 #include "xstudio/utility/logging.hpp"
 #include "xstudio/utility/sequence.hpp"

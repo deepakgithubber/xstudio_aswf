@@ -3,9 +3,9 @@ SET(LINK_DEPS
 	fmt::fmt
 	nlohmann_json::nlohmann_json
 	reproc++
-	spdlog::spdlog
-	stdc++fs
-	uuid
+	spdlog::spdlog_header_only
+	#uuid
+	"-framework CoreFoundation"
 )
 
 SET(STATIC_LINK_DEPS
@@ -13,9 +13,9 @@ SET(STATIC_LINK_DEPS
 	fmt::fmt
 	nlohmann_json::nlohmann_json
 	reproc++
-	spdlog::spdlog
-	stdc++fs
-	uuid
+	spdlog::spdlog_header_only
+	#uuid
+	"-framework CoreFoundation"
 )
 
 find_package(spdlog REQUIRED)
@@ -25,3 +25,4 @@ find_package(PkgConfig REQUIRED)
 pkg_search_module(UUID REQUIRED uuid)
 
 create_component_static(utility 0.1.0 "${LINK_DEPS}" "${STATIC_LINK_DEPS}")
+

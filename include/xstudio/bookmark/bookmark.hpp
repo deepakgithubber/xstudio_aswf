@@ -230,7 +230,11 @@ namespace bookmark {
 
 
         std::string created() const {
-            auto dt = (created_ ? *created_ : std::chrono::system_clock::now());
+            #ifdef __APPLE__
+                auto dt = (created_ ? *created_ : std::chrono::high_resolution_clock::now());
+            #elif
+                auto dt = (created_ ? *created_ : std::chrono::system_clock::now());
+            #endif
             return utility::to_string(dt);
         }
 

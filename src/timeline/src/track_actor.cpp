@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 #include <caf/policy/select_all.hpp>
 
+#include <chrono>
+
 #include "xstudio/atoms.hpp"
 #include "xstudio/broadcast/broadcast_actor.hpp"
 #include "xstudio/media/media.hpp"

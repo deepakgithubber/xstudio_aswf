@@ -8,7 +8,11 @@
 #include <cassert>
 #include <cstdint>
 #include <iostream>
-#include <malloc.h>
+#ifdef __APPLE__
+	#include <stdlib.h>
+#elif __linux__
+	#include <malloc.h>
+#endif
 #include <new>
 
 #define UNSET_DTS -1e6

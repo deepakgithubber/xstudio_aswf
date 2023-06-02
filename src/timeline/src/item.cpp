@@ -636,21 +636,21 @@ bool Item::process_event(const utility::JsonStore &event) {
             break;
         case IT_INSERT: {
             auto it = begin();
-            std::advance(it, event["index"]);
+            std::advance(it, static_cast<int>(event["index"]));
             insert_direct(it, Item(JsonStore(event["item"]), the_system_));
         } break;
         case IT_REMOVE: {
             auto it = begin();
-            std::advance(it, event["index"]);
+            std::advance(it, static_cast<int>(event["index"]));
             erase_direct(it);
         } break;
         case IT_SPLICE: {
             auto it1 = begin();
-            std::advance(it1, event["value1"]);
+            std::advance(it1, static_cast<int>(event["value1"]));
             auto it2 = begin();
-            std::advance(it2, event["value2"]);
+            std::advance(it2, static_cast<int>(event["value2"]));
             auto it3 = begin();
-            std::advance(it3, event["value3"]);
+            std::advance(it3, static_cast<int>(event["value3"]));
             splice_direct(it1, *this, it2, it3);
         } break;
 

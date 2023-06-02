@@ -1,5 +1,5 @@
 project(audio_output VERSION 0.1.0 LANGUAGES CXX)
-find_package(ALSA REQUIRED)
+#find_package(ALSA REQUIRED)
 find_package(PulseAudio REQUIRED)
 
 set(SOURCES
@@ -25,8 +25,7 @@ target_link_libraries(${PROJECT_NAME}
 		xstudio::utility
 		xstudio::media_reader
 		caf::core
-        pulse
-		pulse-simple
+        "${PulseAudio_LIBRARIES}"
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES LINK_DEPENDS_NO_SHARED true)

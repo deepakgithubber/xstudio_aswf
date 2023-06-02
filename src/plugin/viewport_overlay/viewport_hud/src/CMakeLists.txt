@@ -1,5 +1,7 @@
 SET(LINK_DEPS
 	xstudio::module
+	xstudio::plugin_manager
+	xstudio::ui::opengl::viewport
 	Imath::Imath
 )
 

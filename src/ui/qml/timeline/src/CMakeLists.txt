@@ -2,6 +2,9 @@ SET(LINK_DEPS
 	${CAF_LIBRARY_core}
 	Qt5::Core
 	xstudio::ui::qml::helper
+	xstudio::ui::qml::playhead
+	xstudio::ui::qml::playlist
+	xstudio::media
 	xstudio::utility
 )
 

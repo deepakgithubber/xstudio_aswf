@@ -39,8 +39,8 @@ namespace ui {
             Q_PROPERTY(QObject *playhead READ playhead NOTIFY playheadChanged)
             Q_PROPERTY(QObject *selectionFilter READ selectionFilter NOTIFY
                            playlistSelectionThingChanged)
-            Q_PROPERTY(
-                QObject *parent_playlist READ parent_playlist NOTIFY parent_playlistChanged)
+            //Q_PROPERTY(
+            //    QObject *parent_playlist READ parent_playlist NOTIFY parent_playlistChanged)
             Q_PROPERTY(QString fullName READ fullName NOTIFY nameChanged)
 
             Q_PROPERTY(bool hasBackend READ hasBackend NOTIFY backendChanged)

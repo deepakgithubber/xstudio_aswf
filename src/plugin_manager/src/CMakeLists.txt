@@ -1,7 +1,7 @@
 SET(LINK_DEPS
 	caf::core
 	dl
-	stdc++fs
+	#stdc++fs
 	xstudio::broadcast
 	xstudio::module
 	xstudio::utility

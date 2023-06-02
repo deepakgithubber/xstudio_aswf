@@ -8,6 +8,7 @@
 #include <execinfo.h>
 #include <functional>
 #include <iostream>
+#include <fstream>
 #include <regex>
 #include <thread>
 #include <unistd.h>
@@ -55,6 +56,8 @@ CAF_PUSH_WARNINGS
 #include <QPalette>
 #include <QString>
 #include <QQuickView>
+#include <QQuickWindow>
+#include <QSGRendererInterface>
 CAF_POP_WARNINGS
 
 #include "xstudio/ui/qml/module_ui.hpp"             //NOLINT
@@ -98,6 +101,19 @@ using namespace xstudio::utility;
 using namespace xstudio;
 
 bool shutdown_xstudio = false;
+
+
+namespace caf {
+namespace detail {
+
+template <>
+struct int_types_by_size<16> {
+  using unsigned_type = __uint128_t;
+  using signed_type = __int128;
+};
+
+} // namespace detail
+} // namespace caf
 
 void handler(int sig) {
     void *array[10];
@@ -337,7 +353,7 @@ struct Launcher {
         if (actions["open_session"]) {
             try {
                 JsonStore js;
-                std::ifstream i(actions["open_session_path"]);
+                std::ifstream i(static_cast<std::string>(actions["open_session_path"]));
                 i >> js;
 
                 if (actions["new_instance"]) {
@@ -815,12 +831,21 @@ int main(int argc, char **argv) {
                     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
                 }
 
+
+                
+		        QSurfaceFormat format;
+		        format.setVersion(2,0);
+		        format.setProfile(QSurfaceFormat::CompatibilityProfile);
+		        QSurfaceFormat::setDefaultFormat(format);
+
                 QApplication app(argc, argv);
                 app.setOrganizationName("DNEG");
                 app.setOrganizationDomain("dneg.com");
                 app.setApplicationVersion(PROJECT_VERSION);
                 app.setApplicationName("xStudio");
                 app.setWindowIcon(QIcon(":images/xstudio_logo_256_v1.svg"));
+		        //app.setDesktopSettingsAware(false);  // Optional: Disable automatic format selection based on desktop settings
+		        //app.setAttribute(Qt::AA_UseDesktopOpenGL); 
 
                 // auto palette =  app.palette();
                 // palette.setColor(QPalette::Normal, QPalette::Highlight, QColor("Red"));

@@ -3,7 +3,6 @@ SET(LINK_DEPS
     	OpenGL::GL
 		OpenGL::GLU
 		GLEW::GLEW
-		//glfw
     	pthread
     	xstudio::ui::base
     	xstudio::utility

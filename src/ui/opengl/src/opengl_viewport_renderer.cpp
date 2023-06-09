@@ -447,14 +447,12 @@ bool OpenGLViewportRenderer::activate_shader(
 
 void OpenGLViewportRenderer::pre_init() {
 
-    #if __linux__
         // Initialize GLEW
-        if (glewInit() != GLEW_OK)
-        {
-    	    std::cerr << "Failed to initialize GLEW" << std::endl;
-     	    return;
-        }
-    #endif
+     //if (glewInit() != GLEW_OK)
+     //{
+    	//std::cerr << "Failed to initialize GLEW" << std::endl;
+     	//return;
+     //}
 
     // we need to know if we have alpha in our draw buffer, which might require
     // different strategies for drawing overlays
@@ -482,4 +480,6 @@ void OpenGLViewportRenderer::pre_init() {
     // add shader for no image render
     no_image_shader_program_ =
        	GLShaderProgramPtr(static_cast<GLShaderProgram *>(new NoImageShaderProgram()));
+
+    std::cout<< "pre init completed..";
 }
